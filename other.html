@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room Puzzle Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .game-container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 150px);
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 150px;
+            height: 150px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 24px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.flipped {
+            background-color: #FFF;
+            color: black;
+        }
+
+        .card.matched {
+            background-color: #FFD700;
+            pointer-events: none;
+        }
+
+        .message {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        #restart-btn {
+            background-color: #28a745;
+            color: white;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #restart-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container">
+        <h1>Escape Room Puzzle Game</h1>
+        <div class="board" id="board"></div>
+        <div class="message" id="message">Match the pairs of cards to unlock the escape!</div>
+        <button id="restart-btn" onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <script>
+        const cardsArray = [
+            'A', 'A', 'B', 'B', 'C', 'C', 'D', 'D',
+            'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'
+        ];
+
+        let shuffledCards = [];
+        let flippedCards = [];
+        let matchedCards = 0;
+
+
+        function initializeGame() {
+            shuffledCards = shuffle(cardsArray);
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+
+            shuffledCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.card = card;
+                cardElement.dataset.index = index;
+                cardElement.addEventListener('click', flipCard);
+                board.appendChild(cardElement);
+            });
+
+
+            flippedCards = [];
+            matchedCards = 0;
+            document.getElementById('message').textContent = 'Match the pairs of cards to unlock the escape!';
+            document.getElementById('restart-btn').style.display = 'none';
+        }
+
+
+        function shuffle(array) {
+            const shuffledArray = [...array];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+
+
+
+        function flipCard(event) {
+            const clickedCard = event.target;
+
+
+
+
+            if (clickedCard.classList.contains('flipped') || clickedCard.classList.contains('matched')) return;
+
+            clickedCard.classList.add('flipped');
+            clickedCard.textContent = clickedCard.dataset.card;
+            flippedCards.push(clickedCard);
+
+
+
+            if (flippedCards.length === 2) {
+                checkForMatch();
+            }
+        }
+
+
+
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+
+            if (card1.dataset.card === card2.dataset.card) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedCards++;
+
+
+                if (matchedCards === cardsArray.length / 2) {
+                    document.getElementById('message').textContent = 'Congratulations! You solved the puzzle, here are the cheat codes: lvl1: MTC lvl3: 1112';
+                    document.getElementById('restart-btn').style.display = 'inline-block';
+                    setTimeout(function () {
+                        window.location.href = 'main.html';
+                    }, 10000);
+                } else {
+                    document.getElementById('message').textContent = 'Keep going! You matched a pair!';
+                }
+
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    card1.textContent = '';
+                    card2.textContent = '';
+                    document.getElementById('message').textContent = 'Try again! The cards do not match.';
+                }, 1000);
+            }
+
+
+            flippedCards = [];
+        }
+
+
+        function restartGame() {
+            initializeGame();
+        }
+
+
+        window.onload = initializeGame;
+    </script>
+
+</body>
+
+</html>

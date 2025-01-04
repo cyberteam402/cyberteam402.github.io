@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You are a Loser!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #ff6347;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #ff6347;
+            color: white;
+            font-size: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d94b3e;
+        }
+
+        .taunt {
+            font-size: 22px;
+            color: #6a5acd;
+            margin-top: 20px;
+            font-weight: bold;
+            opacity: 0;
+            animation: flash 1s infinite alternate;
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 0;
+                color: #ff6347;
+            }
+
+            50% {
+                opacity: 1;
+                color: #ff4500;
+            }
+
+            100% {
+                opacity: 0;
+                color: #ff6347;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>You are a Loser!</h1>
+
+    <button onclick="taunt()">Click to get cheatcodes!</button>
+
+    <div class="taunt" id="taunt-message"></div>
+
+    <script>
+        const taunts = [
+            "You couldn't win if your life depended on it!",
+            "Oof, you really thought you'd win? You must be joking!",
+            "I bet you practiced... still a loser!",
+            "You’re the champion of losing, congrats!",
+            "Oh no, your skills are... well, non-existent."
+        ];
+
+        function taunt() {
+            const tauntMessage = document.getElementById('taunt-message');
+            const randomTaunt = taunts[Math.floor(Math.random() * taunts.length)];
+            tauntMessage.textContent = randomTaunt;
+        }
+
+        setTimeout(function () {
+            window.location.href = 'other.html';
+        }, 10000);
+    </script>
+
+</body>
+
+</html>
